@@ -73,7 +73,9 @@ public class FileController implements ActionListener{
 			Document document = dBuilder.parse(xml);
 			document.getDocumentElement().normalize();
 			Node node = document.getDocumentElement();
+			editorKit.insertHTML(doc, 0, "<style> .nobullet{list-style-type: none;} </style><ul>", 0, 0, null );
 			readFile(node,0);
+			editorKit.insertHTML(doc, doc.getLength(), "</ul>", 0, 0, null );
 			
 		} catch(Exception e){
 			e.printStackTrace();
@@ -91,6 +93,7 @@ public class FileController implements ActionListener{
 	public void readFile(Node node, int indentLevel) throws BadLocationException, IOException{
 		formatName(node, indentLevel);
 		NodeList nodeList = node.getChildNodes();
+
 		for(int index = 0; index < nodeList.getLength(); index++){
 			Node child = nodeList.item(index);
 			formatValue(child, indentLevel);
@@ -108,10 +111,10 @@ public class FileController implements ActionListener{
 	 */
 	public void formatValue(Node node, int indentLevel) throws BadLocationException, IOException{
 		if(node instanceof Text)
-			if(!node.getNodeValue().trim().isEmpty()){
-				for(int i = 0; i < indentLevel; i++)
-					editorKit.insertHTML(doc, doc.getLength(), indentChar, 0, 0, null );
-				editorKit.insertHTML(doc, doc.getLength(), indentChar + node.getNodeValue().trim(), 0, 0, null );
+			if(!node.getNodeValue().trim().isEmpty()){			
+				editorKit.insertHTML(doc,doc.getLength(), "<li class='nobullet' style='margin-left:" + indentLevel*20 + "px'>"
+					+ node.getNodeValue().trim()
+					+ "</li>", 0, 0, null );
 			}
 	}
 	
@@ -125,11 +128,10 @@ public class FileController implements ActionListener{
 	 */
 	public void formatName(Node node, int indentLevel) throws IOException, BadLocationException{
 		if(node instanceof Text)
-			return;
-		editorKit.insertHTML(doc, doc.getLength(), "\n", 0, 0, null );
-		for(int i = 0; i < indentLevel; i++)
-			editorKit.insertHTML(doc, doc.getLength(), indentChar, 0, 0, null );
-		editorKit.insertHTML(doc, doc.getLength(), "<html><b>" + node.getNodeName().toUpperCase() + "</b></html>", 0, 0, null );
+			return;		
+		editorKit.insertHTML(doc, doc.getLength(), "<li class='nobullet' style='margin-left:" + indentLevel*20 + "px'><b>"
+			+ node.getNodeName().toUpperCase()
+			+ "</b></li>", 0, 0, null );
 	}
 	
 	
