@@ -12,12 +12,16 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 
 public class MainView extends JFrame{
 	private JTextPane mainTextArea;
 	private JTree navTree;
-	
+	private DefaultTreeModel treeModel;
+	private DefaultMutableTreeNode root;
+
 	public MainView() {
 		getContentPane().setLayout(new MigLayout("", "[grow][grow]", "[][grow]"));
 		
@@ -25,7 +29,8 @@ public class MainView extends JFrame{
 		getContentPane().add(splitPane, "cell 0 1 3 1,grow");
 		
 		this.navTree = new JTree();
-		splitPane.setLeftComponent(navTree);
+		this.treeModel = (DefaultTreeModel) navTree.getModel();
+		this.root = (DefaultMutableTreeNode) treeModel.getRoot();
 		
 		JScrollPane mainTextPane = new JScrollPane();
 		splitPane.setRightComponent(mainTextPane);
@@ -33,6 +38,11 @@ public class MainView extends JFrame{
 		this.mainTextArea = new JTextPane();
 		mainTextArea.setContentType( "text/html" );
 		mainTextPane.setViewportView(mainTextArea);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		splitPane.setLeftComponent(scrollPane);
+		
+		scrollPane.setViewportView(navTree);
 		
 		JPanel toolbar = new ToolbarView(this);
 		getContentPane().add(toolbar, "cell 0 0 2 1,grow");
@@ -44,6 +54,22 @@ public class MainView extends JFrame{
 	
 	public JTree getNavTree(){
 		return this.navTree;
+	}
+	
+	public DefaultTreeModel getTreeModel() {
+		return treeModel;
+	}
+
+	public void setTreeModel(DefaultTreeModel treeModel) {
+		this.treeModel = treeModel;
+	}
+
+	public DefaultMutableTreeNode getRoot() {
+		return root;
+	}
+
+	public void setRoot(DefaultMutableTreeNode root) {
+		this.root = root;
 	}
 
 }

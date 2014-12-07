@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 import javax.swing.JTextPane;
@@ -11,6 +12,9 @@ import javax.swing.JTree;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -25,21 +29,30 @@ import xmlreader.view.MainView;
 public class FileController implements ActionListener{
 	private final static JFileChooser fc = new JFileChooser();
 	private File xmlFile;
-	private String indentChar = "\t";
 	private MainView mainView;
 	private String filePath;
 	private JTextPane mainTextArea;
 	private HTMLDocument doc;
 	HTMLEditorKit editorKit;
+	
 	private JTree navTree;
+	private DefaultTreeModel treeModel;
+	private DefaultMutableTreeNode treeRoot;
+	private ArrayList<DefaultMutableTreeNode> treeStructureList;
 	
 	
 	public FileController(MainView mainView){
+		
 		this.filePath = null;
 		this.mainTextArea = mainView.getMainTextArea();
 		this.doc = (HTMLDocument) mainTextArea.getDocument();
 		this.editorKit = (HTMLEditorKit)mainTextArea.getEditorKit();
+		
 		this.navTree = mainView.getNavTree();
+		this.treeModel = mainView.getTreeModel();
+		this.treeRoot = mainView.getRoot();
+		this.treeStructureList = new ArrayList<DefaultMutableTreeNode>();
+		treeStructureList.add(treeRoot);
 		
 	}
 
@@ -48,7 +61,6 @@ public class FileController implements ActionListener{
 		int returnVal = fc.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			mainTextArea.setText("");
-			navTree.setModel(null);
 			this.xmlFile = fc.getSelectedFile();
 			this.filePath = xmlFile.getAbsolutePath();
 			
@@ -56,7 +68,6 @@ public class FileController implements ActionListener{
 				openFile(xmlFile);
 			} catch (FileNotFoundException e1) {
 				System.out.println("Could not find file " + filePath);
-				//e1.printStackTrace();
 			}
 		}
 		
@@ -132,6 +143,30 @@ public class FileController implements ActionListener{
 		editorKit.insertHTML(doc, doc.getLength(), "<li class='nobullet' style='margin-left:" + indentLevel*20 + "px'><b>"
 			+ node.getNodeName().toUpperCase()
 			+ "</b></li>", 0, 0, null );
+		addElementToTree(node);
+	}
+	
+	public void addElementToTree(Node node){
+		DefaultMutableTreeNode parentNode = getTreeNode(node.getParentNode() );
+		DefaultMutableTreeNode nodeToAdd = new DefaultMutableTreeNode(node.getNodeName());
+		
+		//If the node has a parent node in the tree
+		if(parentNode != null){
+			treeModel.insertNodeInto( nodeToAdd, parentNode, parentNode.getChildCount() );
+			treeStructureList.add(nodeToAdd);
+		} else {
+			treeStructureList.add(nodeToAdd);
+			treeModel.insertNodeInto( nodeToAdd, treeRoot, treeRoot.getChildCount() );
+		}
+	}
+	
+	public DefaultMutableTreeNode getTreeNode(Node node){
+		DefaultMutableTreeNode lastNode = null;
+		for( DefaultMutableTreeNode treeNode : treeStructureList){
+			if( treeNode.getUserObject().toString().equals(node.getNodeName()) )
+				lastNode = treeNode;
+		}
+		return lastNode;
 	}
 	
 	
