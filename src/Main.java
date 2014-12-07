@@ -2,6 +2,8 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
+import xmlreader.view.MainView;
+
 
 public class Main {
 	public static void main(String[] args){

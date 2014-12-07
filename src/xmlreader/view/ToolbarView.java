@@ -1,8 +1,13 @@
+package xmlreader.view;
 import javax.swing.JPanel;
+
 import net.miginfocom.swing.MigLayout;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+
+import xmlreader.controller.FileController;
 
 
 public class ToolbarView extends JPanel {
@@ -16,6 +21,7 @@ public class ToolbarView extends JPanel {
 		browseField.setColumns(10);
 		
 		JButton btnBrowse = new JButton("Browse");
+		btnBrowse.addActionListener(new FileController());
 		add(btnBrowse, "cell 1 0");
 		
 		searchField = new JTextField();

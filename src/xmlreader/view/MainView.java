@@ -1,3 +1,4 @@
+package xmlreader.view;
 import javax.swing.JFrame;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JSplitPane;
