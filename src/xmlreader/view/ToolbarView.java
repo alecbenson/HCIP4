@@ -13,7 +13,7 @@ import xmlreader.controller.FileController;
 public class ToolbarView extends JPanel {
 	private JTextField browseField;
 	private JTextField searchField;
-	public ToolbarView() {
+	public ToolbarView(MainView mainView) {
 		setLayout(new MigLayout("", "[grow][grow][grow][grow][grow][grow]", "[]"));
 		
 		browseField = new JTextField();
@@ -21,7 +21,7 @@ public class ToolbarView extends JPanel {
 		browseField.setColumns(10);
 		
 		JButton btnBrowse = new JButton("Browse");
-		btnBrowse.addActionListener(new FileController());
+		btnBrowse.addActionListener(new FileController(mainView));
 		add(btnBrowse, "cell 1 0");
 		
 		searchField = new JTextField();

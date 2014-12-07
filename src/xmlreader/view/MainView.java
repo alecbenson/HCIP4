@@ -11,23 +11,34 @@ import javax.swing.JButton;
 
 
 public class MainView extends JFrame{
+	private JTextArea mainTextArea;
+	private JTree navTree;
+	
 	public MainView() {
 		getContentPane().setLayout(new MigLayout("", "[grow][grow]", "[][grow]"));
-		
-		JPanel toolbar = new ToolbarView();
-		getContentPane().add(toolbar, "cell 0 0 2 1,grow");
 		
 		JSplitPane splitPane = new JSplitPane();
 		getContentPane().add(splitPane, "cell 0 1 3 1,grow");
 		
-		JTree navTree = new JTree();
+		this.navTree = new JTree();
 		splitPane.setLeftComponent(navTree);
 		
 		JScrollPane mainTextPane = new JScrollPane();
 		splitPane.setRightComponent(mainTextPane);
 		
-		JTextArea mainTextArea = new JTextArea();
+		this.mainTextArea = new JTextArea();
 		mainTextPane.setViewportView(mainTextArea);
+		
+		JPanel toolbar = new ToolbarView(this);
+		getContentPane().add(toolbar, "cell 0 0 2 1,grow");
+	}
+	
+	public JTextArea getMainTextArea(){
+		return this.mainTextArea;
+	}
+	
+	public JTree getNavTree(){
+		return this.navTree;
 	}
 
 }

@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import javax.swing.JFileChooser;
+import javax.swing.JTextArea;
+import javax.swing.JTree;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -13,29 +15,40 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
+import xmlreader.view.MainView;
+
 
 public class FileController implements ActionListener{
 	private final static JFileChooser fc = new JFileChooser();
 	private File xmlFile;
-	private String filePath;
 	private String indentChar = "\t";
+	private MainView mainView;
+	private String filePath;
+	private JTextArea mainTextArea;
+	private JTree navTree;
 	
 	
-	public FileController(){
+	public FileController(MainView mainView){
 		this.filePath = null;
+		this.mainTextArea = mainView.getMainTextArea();
+		this.navTree = mainView.getNavTree();
+		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		int returnVal = fc.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			mainTextArea.setText("");
+			navTree.setModel(null);
 			this.xmlFile = fc.getSelectedFile();
 			this.filePath = xmlFile.getAbsolutePath();
 			
 			try {
 				openFile(xmlFile);
 			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
+				System.out.println("Could not find file " + filePath);
+				//e1.printStackTrace();
 			}
 		}
 		
@@ -85,8 +98,8 @@ public class FileController implements ActionListener{
 		if(node instanceof Text)
 			if(!node.getNodeValue().trim().isEmpty()){
 				for(int i = 0; i < indentLevel; i++)
-					System.out.print(indentChar);
-				System.out.println(indentChar + node.getNodeValue().trim());
+					mainTextArea.append(indentChar);
+				mainTextArea.append(indentChar + node.getNodeValue().trim());
 			}
 	}
 	
@@ -99,10 +112,10 @@ public class FileController implements ActionListener{
 	public void formatName(Node node, int indentLevel){
 		if(node instanceof Text)
 			return;
-		System.out.print("\n");
+		mainTextArea.append("\n");
 		for(int i = 0; i < indentLevel; i++)
-			System.out.print(indentChar);
-		System.out.println(node.getNodeName().toUpperCase());
+			mainTextArea.append(indentChar);
+		mainTextArea.append(node.getNodeName().toUpperCase());
 	}
 	
 	
