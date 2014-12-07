@@ -1,7 +1,11 @@
 package xmlreader.view;
 import javax.swing.JFrame;
+
 import net.miginfocom.swing.MigLayout;
+
+import javax.swing.JEditorPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -11,7 +15,7 @@ import javax.swing.JButton;
 
 
 public class MainView extends JFrame{
-	private JTextArea mainTextArea;
+	private JTextPane mainTextArea;
 	private JTree navTree;
 	
 	public MainView() {
@@ -26,14 +30,15 @@ public class MainView extends JFrame{
 		JScrollPane mainTextPane = new JScrollPane();
 		splitPane.setRightComponent(mainTextPane);
 		
-		this.mainTextArea = new JTextArea();
+		this.mainTextArea = new JTextPane();
+		mainTextArea.setContentType( "text/html" );
 		mainTextPane.setViewportView(mainTextArea);
 		
 		JPanel toolbar = new ToolbarView(this);
 		getContentPane().add(toolbar, "cell 0 0 2 1,grow");
 	}
 	
-	public JTextArea getMainTextArea(){
+	public JTextPane getMainTextArea(){
 		return this.mainTextArea;
 	}
 	

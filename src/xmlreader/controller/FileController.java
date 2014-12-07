@@ -3,10 +3,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.swing.JFileChooser;
-import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.JTree;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -24,13 +28,17 @@ public class FileController implements ActionListener{
 	private String indentChar = "\t";
 	private MainView mainView;
 	private String filePath;
-	private JTextArea mainTextArea;
+	private JTextPane mainTextArea;
+	private HTMLDocument doc;
+	HTMLEditorKit editorKit;
 	private JTree navTree;
 	
 	
 	public FileController(MainView mainView){
 		this.filePath = null;
 		this.mainTextArea = mainView.getMainTextArea();
+		this.doc = (HTMLDocument) mainTextArea.getDocument();
+		this.editorKit = (HTMLEditorKit)mainTextArea.getEditorKit();
 		this.navTree = mainView.getNavTree();
 		
 	}
@@ -77,8 +85,10 @@ public class FileController implements ActionListener{
 	 * recursively iterates through the XML file and parses it
 	 * @param node - the node to start at
 	 * @param indentLevel - the indentation level to start at
+	 * @throws BadLocationException 
+	 * @throws IOException 
 	 */
-	public void readFile(Node node, int indentLevel){
+	public void readFile(Node node, int indentLevel) throws BadLocationException, IOException{
 		formatName(node, indentLevel);
 		NodeList nodeList = node.getChildNodes();
 		for(int index = 0; index < nodeList.getLength(); index++){
@@ -93,13 +103,15 @@ public class FileController implements ActionListener{
 	 * Format the value of the node so that it is readable
 	 * @param node - the node to format
 	 * @param indentLevel - an integer that represents how much the text should be indented
+	 * @throws BadLocationException 
+	 * @throws IOException 
 	 */
-	public void formatValue(Node node, int indentLevel){
+	public void formatValue(Node node, int indentLevel) throws BadLocationException, IOException{
 		if(node instanceof Text)
 			if(!node.getNodeValue().trim().isEmpty()){
 				for(int i = 0; i < indentLevel; i++)
-					mainTextArea.append(indentChar);
-				mainTextArea.append(indentChar + node.getNodeValue().trim());
+					editorKit.insertHTML(doc, doc.getLength(), indentChar, 0, 0, null );
+				editorKit.insertHTML(doc, doc.getLength(), indentChar + node.getNodeValue().trim(), 0, 0, null );
 			}
 	}
 	
@@ -108,14 +120,16 @@ public class FileController implements ActionListener{
 	 * Formats the title of the node so that it is readable
 	 * @param node - the node to format
 	 * @param indentLevel - an integer that represents how much the text should be indented
+	 * @throws BadLocationException 
+	 * @throws IOException 
 	 */
-	public void formatName(Node node, int indentLevel){
+	public void formatName(Node node, int indentLevel) throws IOException, BadLocationException{
 		if(node instanceof Text)
 			return;
-		mainTextArea.append("\n");
+		editorKit.insertHTML(doc, doc.getLength(), "\n", 0, 0, null );
 		for(int i = 0; i < indentLevel; i++)
-			mainTextArea.append(indentChar);
-		mainTextArea.append(node.getNodeName().toUpperCase());
+			editorKit.insertHTML(doc, doc.getLength(), indentChar, 0, 0, null );
+		editorKit.insertHTML(doc, doc.getLength(), "<html><b>" + node.getNodeName().toUpperCase() + "</b></html>", 0, 0, null );
 	}
 	
 	
