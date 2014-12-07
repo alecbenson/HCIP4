@@ -15,6 +15,8 @@ import javax.swing.JButton;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
+import xmlreader.controller.TreeController;
+
 
 public class MainView extends JFrame{
 	private JTextPane mainTextArea;
@@ -28,20 +30,21 @@ public class MainView extends JFrame{
 		JSplitPane splitPane = new JSplitPane();
 		getContentPane().add(splitPane, "cell 0 1 3 1,grow");
 		
-		this.navTree = new JTree();
-		this.treeModel = (DefaultTreeModel) navTree.getModel();
-		this.root = (DefaultMutableTreeNode) treeModel.getRoot();
-		
 		JScrollPane mainTextPane = new JScrollPane();
 		splitPane.setRightComponent(mainTextPane);
 		
 		this.mainTextArea = new JTextPane();
 		mainTextArea.setContentType( "text/html" );
+		mainTextArea.setEditable(false);
 		mainTextPane.setViewportView(mainTextArea);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		splitPane.setLeftComponent(scrollPane);
 		
+		this.navTree = new JTree();
+		this.treeModel = (DefaultTreeModel) navTree.getModel();
+		this.root = (DefaultMutableTreeNode) treeModel.getRoot();
+		navTree.addTreeSelectionListener(new TreeController(this) );
 		scrollPane.setViewportView(navTree);
 		
 		JPanel toolbar = new ToolbarView(this);
