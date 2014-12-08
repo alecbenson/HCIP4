@@ -17,6 +17,10 @@ public class XMLTreeNode extends DefaultMutableTreeNode{
 		this.index = index;
 	}
 	
+	public XMLTreeNode(Node node){
+		this.node = node;
+	}
+	
 	@Override
 	public String toString(){
 		return node.getNodeName();
@@ -24,6 +28,10 @@ public class XMLTreeNode extends DefaultMutableTreeNode{
 	
 	public int getIndex(){
 		return index;
+	}
+	
+	public void setIndex(int index){
+		this.index = index;
 	}
 	
 	@Override

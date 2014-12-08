@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 import javax.swing.JFileChooser;
 import javax.swing.JTextPane;
@@ -35,7 +36,6 @@ public class FileController implements ActionListener{
 	private JTextPane mainTextArea;
 	private ToolbarView toolbarView;
 	private HTMLDocument doc;
-	private static int index;
 	HTMLEditorKit editorKit;
 	
 	private JTree navTree;
@@ -155,7 +155,7 @@ public class FileController implements ActionListener{
 	
 	public void addElementToTree(Node node){
 		XMLTreeNode parentNode = (XMLTreeNode) getTreeNode(node.getParentNode() );
-		XMLTreeNode nodeToAdd = new XMLTreeNode(node, index++);
+		XMLTreeNode nodeToAdd = new XMLTreeNode(node, getNodeIndex(node));
 		
 		//If the node has a parent node in the tree
 		if(parentNode != null){
@@ -165,6 +165,16 @@ public class FileController implements ActionListener{
 			treeStructureList.add(nodeToAdd);
 			treeModel.insertNodeInto( nodeToAdd, treeRoot, treeRoot.getChildCount() );
 		}
+	}
+	
+	public int getNodeIndex(Node node){
+		int index = 0;
+		Enumeration e = treeRoot.depthFirstEnumeration();
+		while(e.hasMoreElements()){
+			if( ((DefaultMutableTreeNode)e.nextElement()).toString() == node.getNodeName() )
+				index++;
+		}
+		return index;
 	}
 	
 	public XMLTreeNode getTreeNode(Node node){

@@ -49,14 +49,17 @@ public class SearchController implements TreeSelectionListener, KeyListener, Cha
 
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		XMLTreeNode node = (XMLTreeNode) navTree.getLastSelectedPathComponent();		
+		XMLTreeNode node = (XMLTreeNode) navTree.getLastSelectedPathComponent();
+		if(node == null)
+			return;
+		
 		String findText = node.getUserObject().toString().toLowerCase();
 		int index = node.getIndex();
 		System.out.println("Index is " + index);
 		ArrayList<Integer> jumpPos = searchForText(findText);
 		
 		try {
-			jumpToText(findText, jumpPos.get(0));
+			jumpToText(findText, jumpPos.get(index));
 		} catch (BadLocationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
