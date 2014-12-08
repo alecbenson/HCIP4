@@ -3,6 +3,9 @@ import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
 
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -20,8 +23,9 @@ public class ToolbarView extends JPanel {
 	private JTextField searchField;
 	private JSpinner findResultSpinner;
 	private MainView mainView;
+	private JLabel searchLabel;
 	public ToolbarView(MainView mainView) {
-		setLayout(new MigLayout("", "[grow][grow][grow][][grow][grow][grow]", "[]"));
+		setLayout(new MigLayout("", "[grow][grow][grow][grow][grow][grow][grow]", "[]"));
 		this.mainView = mainView;
 		
 		browseField = new JTextField();
@@ -30,19 +34,20 @@ public class ToolbarView extends JPanel {
 		browseField.setColumns(10);
 		
 		JButton btnBrowse = new JButton("Browse");
-		btnBrowse.addActionListener(new FileController(this));
 		add(btnBrowse, "cell 1 0");
 		
-		findResultSpinner = new JSpinner();
-		add(findResultSpinner, "cell 3 0");
+		String iconPath = "/xmlreader/icons/search.png";
 		
 		searchField = new JTextField();
-		add(searchField, "cell 2 0,growx");
 		searchField.setColumns(10);
+		add(searchField, "cell 2 0,growx,aligny center");
 		
-		SearchController searchController = new SearchController(this);
-		searchField.addKeyListener(searchController);
-		findResultSpinner.addChangeListener(searchController);
+		
+		findResultSpinner = new JSpinner();
+		JComponent editor = findResultSpinner.getEditor();
+		JFormattedTextField tf = ((JSpinner.DefaultEditor) editor).getTextField();
+		tf.setColumns(4);
+		add(findResultSpinner, "flowx,cell 3 0,alignx left");
 				
 		JButton btnBack = new JButton("Back");
 		btnBack.setHorizontalAlignment(SwingConstants.TRAILING);
@@ -50,6 +55,13 @@ public class ToolbarView extends JPanel {
 		
 		JButton btnForward = new JButton("Forward");
 		add(btnForward, "cell 6 0,alignx left");
+		searchLabel = new JLabel(new ImageIcon(getClass().getResource(iconPath)));
+		add(searchLabel, "cell 3 0,alignx left");
+		
+		SearchController searchController = new SearchController(this);
+		btnBrowse.addActionListener(new FileController(this));
+		findResultSpinner.addChangeListener(searchController);
+		searchField.addKeyListener(searchController);
 	}
 	
 	public JTextField getSearchField(){

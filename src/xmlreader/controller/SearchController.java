@@ -114,12 +114,6 @@ public class SearchController implements TreeSelectionListener, KeyListener, Cha
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
 		String text = searchBox.getText();
 		try {
 			searchBoxSearch(text);
@@ -127,6 +121,10 @@ public class SearchController implements TreeSelectionListener, KeyListener, Cha
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
 	}
 	
 	
