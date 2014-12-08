@@ -96,10 +96,12 @@ public class SearchController implements TreeSelectionListener, KeyListener, Cha
 		if(findResults.size() == 0 || text.isEmpty()){
 			searchBox.setBackground(new Color(255,120,120));
 			resultLabel.setVisible(false);
+			findResultSpinner.setEnabled(false);
 			return;
 		}
 		
 		resultLabel.setVisible(true);
+		findResultSpinner.setEnabled(true);
 		searchBox.setBackground(Color.white);
 		int spinnerVal = (Integer)findResultSpinner.getValue();
 		spinnerVal = spinnerVal > findResults.size()-1 ? findResults.size()-1 : spinnerVal;
@@ -135,24 +137,23 @@ public class SearchController implements TreeSelectionListener, KeyListener, Cha
 	
 	
 	public void stateChanged(ChangeEvent e) {
-		
 		int spinnerVal = (Integer)findResultSpinner.getValue();
 		
-		if(spinnerVal > 0 && spinnerVal >= findResults.size() - 1){
-			System.out.println("Setting spinner value to " + (findResults.size() -1));
-			findResultSpinner.setValue( this.findResults.size()-1 );
-			spinnerVal = findResults.size()-1;
+		if(spinnerVal > 1 && spinnerVal >= findResults.size()){
+			System.out.println("Setting spinner value to " + (findResults.size()));
+			findResultSpinner.setValue( this.findResults.size() );
+			spinnerVal = findResults.size();
 		}
 		
-		if(spinnerVal < 0){
-			findResultSpinner.setValue(0);
-			spinnerVal = 0;
+		if(spinnerVal < 1){
+			findResultSpinner.setValue(1);
+			spinnerVal = 1;
 		}
 		
 		try {
 			if(findResults.size() > 0)
-				jumpToText(searchBox.getText(), findResults.get(spinnerVal));
-				this.resultLabel.setText("Showing result " + (spinnerVal+1) + " of " + findResults.size());
+				jumpToText(searchBox.getText(), findResults.get(spinnerVal-1));
+				this.resultLabel.setText("Showing result " + (spinnerVal) + " of " + findResults.size());
 		} catch (BadLocationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

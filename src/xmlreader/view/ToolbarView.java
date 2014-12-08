@@ -45,12 +45,16 @@ public class ToolbarView extends JPanel {
 		searchField = new JTextField();
 		searchField.setColumns(10);
 		searchField.setMargin(new Insets(0,0,0,0));
+		searchField.setText("Search this document");
+		searchField.setEnabled(false);
 		add(searchField, "cell 2 0,growx,aligny center");
 		
 		lblResult = new JLabel();
 		add(lblResult, "cell 2 1,alignx left");
 		
 		findResultSpinner = new JSpinner();
+		findResultSpinner.setValue(1);
+		findResultSpinner.setEnabled(false);
 		JComponent editor = findResultSpinner.getEditor();
 		JFormattedTextField tf = ((JSpinner.DefaultEditor) editor).getTextField();
 		tf.setColumns(4);

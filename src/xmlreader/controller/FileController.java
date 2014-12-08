@@ -68,6 +68,7 @@ public class FileController implements ActionListener{
 			this.xmlFile = fc.getSelectedFile();
 			this.filePath = xmlFile.getAbsolutePath();
 			toolbarView.getBrowseField().setText(filePath);
+			toolbarView.getSearchField().setEnabled(true);
 			
 			try {
 				openFile(xmlFile);
