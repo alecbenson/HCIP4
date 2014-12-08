@@ -2,20 +2,16 @@ package xmlreader.view;
 import javax.swing.JFrame;
 
 import net.miginfocom.swing.MigLayout;
-
-import javax.swing.JEditorPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.JPanel;
-import javax.swing.JButton;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import xmlreader.controller.SearchController;
+import xmlreader.controller.HighlightCaret;
 
 
 public class MainView extends JFrame{
@@ -36,6 +32,7 @@ public class MainView extends JFrame{
 		this.mainTextArea = new JTextPane();
 		mainTextArea.setContentType( "text/html" );
 		mainTextArea.setEditable(false);
+		mainTextArea.setCaret(new HighlightCaret());
 		mainTextPane.setViewportView(mainTextArea);
 		
 		JScrollPane scrollPane = new JScrollPane();
