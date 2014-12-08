@@ -14,7 +14,6 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -23,6 +22,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
+import xmlreader.model.XMLTreeNode;
 import xmlreader.view.MainView;
 import xmlreader.view.ToolbarView;
 
@@ -35,6 +35,7 @@ public class FileController implements ActionListener{
 	private JTextPane mainTextArea;
 	private ToolbarView toolbarView;
 	private HTMLDocument doc;
+	private static int index;
 	HTMLEditorKit editorKit;
 	
 	private JTree navTree;
@@ -153,8 +154,8 @@ public class FileController implements ActionListener{
 	}
 	
 	public void addElementToTree(Node node){
-		DefaultMutableTreeNode parentNode = getTreeNode(node.getParentNode() );
-		DefaultMutableTreeNode nodeToAdd = new DefaultMutableTreeNode(node.getNodeName());
+		XMLTreeNode parentNode = (XMLTreeNode) getTreeNode(node.getParentNode() );
+		XMLTreeNode nodeToAdd = new XMLTreeNode(node, index++);
 		
 		//If the node has a parent node in the tree
 		if(parentNode != null){
@@ -166,11 +167,11 @@ public class FileController implements ActionListener{
 		}
 	}
 	
-	public DefaultMutableTreeNode getTreeNode(Node node){
-		DefaultMutableTreeNode lastNode = null;
+	public XMLTreeNode getTreeNode(Node node){
+		XMLTreeNode lastNode = null;
 		for( DefaultMutableTreeNode treeNode : treeStructureList){
 			if( treeNode.getUserObject().toString().equals(node.getNodeName()) )
-				lastNode = treeNode;
+				lastNode = (XMLTreeNode) treeNode;
 		}
 		return lastNode;
 	}

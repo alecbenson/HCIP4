@@ -20,6 +20,7 @@ import javax.swing.text.Document;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 
+import xmlreader.model.XMLTreeNode;
 import xmlreader.view.MainView;
 import xmlreader.view.ToolbarView;
 
@@ -48,8 +49,10 @@ public class SearchController implements TreeSelectionListener, KeyListener, Cha
 
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode) navTree.getLastSelectedPathComponent();		
+		XMLTreeNode node = (XMLTreeNode) navTree.getLastSelectedPathComponent();		
 		String findText = node.getUserObject().toString().toLowerCase();
+		int index = node.getIndex();
+		System.out.println("Index is " + index);
 		ArrayList<Integer> jumpPos = searchForText(findText);
 		
 		try {
