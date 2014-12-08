@@ -15,7 +15,7 @@ import javax.swing.JButton;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import xmlreader.controller.TreeController;
+import xmlreader.controller.SearchController;
 
 
 public class MainView extends JFrame{
@@ -44,10 +44,10 @@ public class MainView extends JFrame{
 		this.navTree = new JTree();
 		this.treeModel = (DefaultTreeModel) navTree.getModel();
 		this.root = (DefaultMutableTreeNode) treeModel.getRoot();
-		navTree.addTreeSelectionListener(new TreeController(this) );
 		scrollPane.setViewportView(navTree);
 		
 		JPanel toolbar = new ToolbarView(this);
+		navTree.addTreeSelectionListener(new SearchController((ToolbarView)toolbar) );
 		getContentPane().add(toolbar, "cell 0 0 2 1,grow");
 	}
 	

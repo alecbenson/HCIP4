@@ -8,13 +8,16 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
 import xmlreader.controller.FileController;
+import xmlreader.controller.SearchController;
 
 
 public class ToolbarView extends JPanel {
 	private JTextField browseField;
 	private JTextField searchField;
+	private MainView mainView;
 	public ToolbarView(MainView mainView) {
 		setLayout(new MigLayout("", "[grow][grow][grow][grow][grow][grow]", "[]"));
+		this.mainView = mainView;
 		
 		browseField = new JTextField();
 		add(browseField, "cell 0 0,growx");
@@ -29,6 +32,7 @@ public class ToolbarView extends JPanel {
 		searchField.setColumns(10);
 		
 		JButton btnSearch = new JButton("Search");
+		btnSearch.addActionListener(new SearchController(this));
 		add(btnSearch, "cell 3 0");
 		
 		JButton btnBack = new JButton("Back");
@@ -37,6 +41,15 @@ public class ToolbarView extends JPanel {
 		
 		JButton btnForward = new JButton("Forward");
 		add(btnForward, "cell 5 0,alignx left");
+	}
+	
+	public JTextField getSearchField(){
+		return searchField;
+	}
+	
+	
+	public MainView getMainView(){
+		return mainView;
 	}
 	
 
