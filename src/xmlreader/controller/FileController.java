@@ -24,6 +24,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 import xmlreader.view.MainView;
+import xmlreader.view.ToolbarView;
 
 
 public class FileController implements ActionListener{
@@ -32,6 +33,7 @@ public class FileController implements ActionListener{
 	private MainView mainView;
 	private String filePath;
 	private JTextPane mainTextArea;
+	private ToolbarView toolbarView;
 	private HTMLDocument doc;
 	HTMLEditorKit editorKit;
 	
@@ -41,8 +43,10 @@ public class FileController implements ActionListener{
 	private ArrayList<DefaultMutableTreeNode> treeStructureList;
 	
 	
-	public FileController(MainView mainView){
+	public FileController(ToolbarView toolbarView){
 		
+		this.mainView = toolbarView.getMainView();
+		this.toolbarView = toolbarView;
 		this.filePath = null;
 		this.mainTextArea = mainView.getMainTextArea();
 		this.doc = (HTMLDocument) mainTextArea.getDocument();
@@ -63,6 +67,7 @@ public class FileController implements ActionListener{
 			mainTextArea.setText("");
 			this.xmlFile = fc.getSelectedFile();
 			this.filePath = xmlFile.getAbsolutePath();
+			toolbarView.getBrowseField().setText(filePath);
 			
 			try {
 				openFile(xmlFile);
