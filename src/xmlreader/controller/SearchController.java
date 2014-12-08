@@ -50,7 +50,14 @@ public class SearchController implements TreeSelectionListener, KeyListener, Cha
 	public void valueChanged(TreeSelectionEvent e) {
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) navTree.getLastSelectedPathComponent();		
 		String findText = node.getUserObject().toString().toLowerCase();
-		searchForText(findText);
+		ArrayList<Integer> jumpPos = searchForText(findText);
+		
+		try {
+			jumpToText(findText, jumpPos.get(0));
+		} catch (BadLocationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	
 	public ArrayList<Integer> searchForText(String text) {
@@ -95,7 +102,7 @@ public class SearchController implements TreeSelectionListener, KeyListener, Cha
 	
 		if(findResults.size() == 0 || text.isEmpty()){
 			searchBox.setBackground(new Color(255,120,120));
-			resultLabel.setVisible(false);
+			resultLabel.setText("No results found.");
 			findResultSpinner.setEnabled(false);
 			return;
 		}
