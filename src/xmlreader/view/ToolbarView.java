@@ -1,4 +1,6 @@
 package xmlreader.view;
+import java.awt.Insets;
+
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
@@ -24,8 +26,10 @@ public class ToolbarView extends JPanel {
 	private JSpinner findResultSpinner;
 	private MainView mainView;
 	private JLabel searchLabel;
+	private JLabel lblResult;
+	
 	public ToolbarView(MainView mainView) {
-		setLayout(new MigLayout("", "[grow][grow][grow][grow][grow][grow][grow]", "[]"));
+		setLayout(new MigLayout("", "[grow][grow][grow][grow][grow][grow][grow]", "[][]"));
 		this.mainView = mainView;
 		
 		browseField = new JTextField();
@@ -40,8 +44,11 @@ public class ToolbarView extends JPanel {
 		
 		searchField = new JTextField();
 		searchField.setColumns(10);
+		searchField.setMargin(new Insets(0,0,0,0));
 		add(searchField, "cell 2 0,growx,aligny center");
 		
+		lblResult = new JLabel();
+		add(lblResult, "cell 2 1,alignx left");
 		
 		findResultSpinner = new JSpinner();
 		JComponent editor = findResultSpinner.getEditor();
@@ -60,6 +67,7 @@ public class ToolbarView extends JPanel {
 		
 		SearchController searchController = new SearchController(this);
 		btnBrowse.addActionListener(new FileController(this));
+		
 		findResultSpinner.addChangeListener(searchController);
 		searchField.addKeyListener(searchController);
 	}
@@ -75,6 +83,10 @@ public class ToolbarView extends JPanel {
 	
 	public MainView getMainView(){
 		return mainView;
+	}
+	
+	public JLabel getResultLabel(){
+		return lblResult;
 	}
 	
 	public JTextField getBrowseField(){

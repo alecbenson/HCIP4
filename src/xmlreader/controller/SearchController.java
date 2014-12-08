@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
+import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
@@ -31,9 +32,11 @@ public class SearchController implements TreeSelectionListener, KeyListener, Cha
 	private JSpinner findResultSpinner;
 	private ArrayList<Integer> findResults;
 	private int pos = 0;
+	private JLabel resultLabel;
 	
 	public SearchController(ToolbarView toolbarView){
 		MainView mainView = toolbarView.getMainView();
+		this.resultLabel = toolbarView.getResultLabel();
 		this.mainTextArea = mainView.getMainTextArea();
 		this.navTree = mainView.getNavTree();
 		this.navModel = navTree.getModel();
@@ -89,12 +92,14 @@ public class SearchController implements TreeSelectionListener, KeyListener, Cha
 	public void searchBoxSearch(String text) throws BadLocationException{
 		findResults.clear();
 		this.findResults = searchForText(text);
-		
-		if(findResults.size() == 0){
+	
+		if(findResults.size() == 0 || text.isEmpty()){
 			searchBox.setBackground(new Color(255,120,120));
+			resultLabel.setVisible(false);
 			return;
 		}
 		
+		resultLabel.setVisible(true);
 		searchBox.setBackground(Color.white);
 		int spinnerVal = (Integer)findResultSpinner.getValue();
 		spinnerVal = spinnerVal > findResults.size()-1 ? findResults.size()-1 : spinnerVal;
@@ -102,6 +107,7 @@ public class SearchController implements TreeSelectionListener, KeyListener, Cha
 		System.out.println("Found " + findResults.size() + " results for the string " + text);
 		
 		jumpToText(text, findResults.get(spinnerVal));
+		this.resultLabel.setText("Showing result " + (spinnerVal+1) + " of " + (findResults.size()));
 		
 		
 	}
@@ -146,6 +152,7 @@ public class SearchController implements TreeSelectionListener, KeyListener, Cha
 		try {
 			if(findResults.size() > 0)
 				jumpToText(searchBox.getText(), findResults.get(spinnerVal));
+				this.resultLabel.setText("Showing result " + (spinnerVal+1) + " of " + findResults.size());
 		} catch (BadLocationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
