@@ -54,10 +54,8 @@ public class FileController implements ActionListener{
 		this.editorKit = (HTMLEditorKit)mainTextArea.getEditorKit();
 		
 		this.navTree = mainView.getNavTree();
-		this.treeModel = mainView.getTreeModel();
-		this.treeRoot = mainView.getRoot();
+		this.navTree.setModel(null);
 		this.treeStructureList = new ArrayList<DefaultMutableTreeNode>();
-		treeStructureList.add(treeRoot);
 		
 	}
 
@@ -91,6 +89,11 @@ public class FileController implements ActionListener{
 			Document document = dBuilder.parse(xml);
 			document.getDocumentElement().normalize();
 			Node node = document.getDocumentElement();
+			
+			this.navTree.setModel(new DefaultTreeModel(new XMLTreeNode(node)));
+			this.treeModel = (DefaultTreeModel) navTree.getModel();
+			this.treeRoot = (DefaultMutableTreeNode) treeModel.getRoot();
+			
 			editorKit.insertHTML(doc, 0, "<style> .nobullet{list-style-type: none;} </style><ul>", 0, 0, null );
 			readFile(node,0);
 			editorKit.insertHTML(doc, doc.getLength(), "</ul>", 0, 0, null );
@@ -179,6 +182,9 @@ public class FileController implements ActionListener{
 	
 	public XMLTreeNode getTreeNode(Node node){
 		XMLTreeNode lastNode = null;
+		if(treeStructureList.isEmpty())
+			return null;
+		
 		for( DefaultMutableTreeNode treeNode : treeStructureList){
 			if( treeNode.getUserObject().toString().equals(node.getNodeName()) )
 				lastNode = (XMLTreeNode) treeNode;

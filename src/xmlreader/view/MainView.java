@@ -2,6 +2,7 @@ package xmlreader.view;
 import javax.swing.JFrame;
 
 import net.miginfocom.swing.MigLayout;
+
 import javax.swing.JSplitPane;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
@@ -9,6 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 
 import xmlreader.controller.SearchController;
 import xmlreader.controller.HighlightCaret;
@@ -27,6 +29,7 @@ public class MainView extends JFrame{
 		getContentPane().add(splitPane, "cell 0 1 3 1,grow");
 		
 		JScrollPane mainTextPane = new JScrollPane();
+		splitPane.setDividerLocation(200);
 		splitPane.setRightComponent(mainTextPane);
 		
 		this.mainTextArea = new JTextPane();
@@ -39,8 +42,6 @@ public class MainView extends JFrame{
 		splitPane.setLeftComponent(scrollPane);
 		
 		this.navTree = new JTree();
-		this.treeModel = (DefaultTreeModel) navTree.getModel();
-		this.root = (DefaultMutableTreeNode) treeModel.getRoot();
 		scrollPane.setViewportView(navTree);
 		
 		JPanel toolbar = new ToolbarView(this);
@@ -54,18 +55,6 @@ public class MainView extends JFrame{
 	
 	public JTree getNavTree(){
 		return this.navTree;
-	}
-	
-	public DefaultTreeModel getTreeModel() {
-		return treeModel;
-	}
-
-	public void setTreeModel(DefaultTreeModel treeModel) {
-		this.treeModel = treeModel;
-	}
-
-	public DefaultMutableTreeNode getRoot() {
-		return root;
 	}
 
 	public void setRoot(DefaultMutableTreeNode root) {
