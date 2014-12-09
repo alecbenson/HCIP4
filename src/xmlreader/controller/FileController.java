@@ -19,6 +19,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
@@ -42,6 +43,7 @@ public class FileController implements ActionListener{
 	private DefaultTreeModel treeModel;
 	private DefaultMutableTreeNode treeRoot;
 	private ArrayList<DefaultMutableTreeNode> treeStructureList;
+	private Element rootNode;
 	
 	
 	public FileController(ToolbarView toolbarView){
@@ -88,14 +90,14 @@ public class FileController implements ActionListener{
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document document = dBuilder.parse(xml);
 			document.getDocumentElement().normalize();
-			Node node = document.getDocumentElement();
+			this.rootNode = document.getDocumentElement();
 			
-			this.navTree.setModel(new DefaultTreeModel(new XMLTreeNode(node)));
+			this.navTree.setModel(new DefaultTreeModel(new XMLTreeNode(rootNode)));
 			this.treeModel = (DefaultTreeModel) navTree.getModel();
 			this.treeRoot = (DefaultMutableTreeNode) treeModel.getRoot();
 			
 			editorKit.insertHTML(doc, 0, "<style> .nobullet{list-style-type: none;} </style><ul>", 0, 0, null );
-			readFile(node,0);
+			readFile(rootNode,0);
 			editorKit.insertHTML(doc, doc.getLength(), "</ul>", 0, 0, null );
 			
 		} catch(Exception e){
@@ -159,6 +161,9 @@ public class FileController implements ActionListener{
 	public void addElementToTree(Node node){
 		XMLTreeNode parentNode = (XMLTreeNode) getTreeNode(node.getParentNode() );
 		XMLTreeNode nodeToAdd = new XMLTreeNode(node, getNodeIndex(node));
+		
+		if(node.equals(rootNode))
+			return;
 		
 		//If the node has a parent node in the tree
 		if(parentNode != null){

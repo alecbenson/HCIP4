@@ -27,21 +27,17 @@ import xmlreader.view.ToolbarView;
 public class SearchController implements TreeSelectionListener, KeyListener, ChangeListener  {
 	private JTextPane mainTextArea;
 	private JTree navTree;
-	private TreeModel navModel;
-	private DefaultMutableTreeNode navRoot;
 	private JTextField searchBox;
 	private JSpinner findResultSpinner;
 	private ArrayList<Integer> findResults;
 	private int pos = 0;
 	private JLabel resultLabel;
+	private MainView mainView;
 	
 	public SearchController(ToolbarView toolbarView){
-		MainView mainView = toolbarView.getMainView();
+		this.mainView = toolbarView.getMainView();
 		this.resultLabel = toolbarView.getResultLabel();
 		this.mainTextArea = mainView.getMainTextArea();
-		this.navTree = mainView.getNavTree();
-		this.navModel = navTree.getModel();
-		this.navRoot = (DefaultMutableTreeNode) navTree.getModel().getRoot();
 		this.searchBox = toolbarView.getSearchField();
 		this.findResultSpinner = toolbarView.getSpinner();
 		this.findResults = new ArrayList<Integer>();
@@ -49,6 +45,10 @@ public class SearchController implements TreeSelectionListener, KeyListener, Cha
 
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
+		this.navTree = mainView.getNavTree();
+		if(navTree == null)
+			return;
+		
 		XMLTreeNode node = (XMLTreeNode) navTree.getLastSelectedPathComponent();
 		if(node == null)
 			return;
