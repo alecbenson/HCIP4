@@ -99,6 +99,7 @@ public class FileController implements ActionListener{
 			editorKit.insertHTML(doc, 0, "<style> .nobullet{list-style-type: none;} </style><ul>", 0, 0, null );
 			readFile(rootNode,0);
 			editorKit.insertHTML(doc, doc.getLength(), "</ul>", 0, 0, null );
+			navTree.expandRow(0);
 			
 		} catch(Exception e){
 			e.printStackTrace();
