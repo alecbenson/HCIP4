@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<man>
+  <log>
+  <topic>
+    NAME
+           log, logf, logl - natural logarithmic function
+  </topic>
+
+  <summary>
+    SYNOPSIS
+           #include math.h
+
+           double log(double x);
+           float logf(float x);
+           long double logl(long double x);
+
+           Link with -lm.
+
+       Feature Test Macro Requirements for glibc (see feature_test_macros(7)):
+
+           logf(), logl():
+               _BSD_SOURCE || _SVID_SOURCE || _XOPEN_SOURCE >= 600 ||
+               _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L;
+               or cc -std=c99
+
+    DESCRIPTION
+           The log() function returns the natural logarithm of x.
+  </summary>
+  <details>
+    RETURN VALUE
+           On success, these functions return the natural logarithm of x.
+
+           If x is a NaN, a NaN is returned.
+
+           If x is 1, the result is +0.
+
+           If x is positive infinity, positive infinity is returned.
+
+           If x is zero, then a  pole  error  occurs,  and  the  functions  return
+           -HUGE_VAL, -HUGE_VALF, or -HUGE_VALL, respectively.
+
+           If  x  is  negative  (including negative infinity), then a domain error
+           occurs, and a NaN (not a number) is returned.
+
+    ERRORS
+           See math_error(7) for information on how to determine whether an  error
+           has occurred when calling these functions.
+
+           The following errors can occur:
+
+           Domain error: x is negative
+                  errno  is  set  to  EDOM.   An  invalid floating-point exception
+                  (FE_INVALID) is raised.
+
+           Pole error: x is zero
+                  errno is set to ERANGE.  A divide-by-zero floating-point  excep‐
+                  tion (FE_DIVBYZERO) is raised.
+
+    CONFORMING TO
+           C99, POSIX.1-2001.  The variant returning double also conforms to SVr4,
+           4.3BSD, C89.
+
+    BUGS
+           In glibc 2.5 and earlier, taking the log() of a NaN  produces  a  bogus
+           invalid floating-point (FE_INVALID) exception.
+
+    SEE ALSO
+           cbrt(3), clog(3), log10(3), log1p(3), log2(3), sqrt(3)
+
+    COLOPHON
+           This  page  is  part of release 3.54 of the Linux man-pages project.  A
+           description of the project, and information about reporting  bugs,  can
+           be found at http://www.kernel.org/doc/man-pages/.
+  </details>
+</log>
+
+<ddate>
+  <topic>
+    NAME
+       ddate - convert Gregorian dates to Discordian dates
+  </topic>
+
+  <summary>
+    SYNOPSIS
+       ddate [+format] [date]
+
+    DESCRIPTION
+           ddate prints the date in Discordian date format.
+
+           If  called  with  no arguments, ddate will get the current system date,
+           convert this to the Discordian date format and print this on the  stan‐
+           dard  output.  Alternatively,  a Gregorian date may be specified on the
+           command line, in the form of a numerical day, month and year.
+
+           If a format string is specified, the Discordian date will be printed in
+           a format specified by the string. This mechanism works similarly to the
+           format string mechanism of date(1), only almost completely differently.
+           The fields are:
+
+           %A     Full name of the day of the week (i.e., Sweetmorn)
+
+           %a     Abbreviated name of the day of the week (i.e., SM)
+
+           %B     Full name of the season (i.e., Chaos)
+
+           %b     Abbreviated name of the season (i.e., Chs)
+
+           %d     Ordinal number of day in season (i.e., 23)
+
+           %e     Cardinal number of day in season (i.e., 23rd)
+
+           %H     Name of current Holyday, if any
+
+           %N     Magic  code  to prevent rest of format from being printed unless
+                  today is a Holyday.
+
+           %n     Newline
+
+           %t     Tab
+
+           %X     Number of days remaining until X-Day. (Not valid if  the  SubGe‐
+                  nius options are not compiled in.)
+
+           %{
+
+           %}     Used  to  enclose the part of the string which is to be replaced
+                  with the words "St. Tib's Day" if the current day is  St.  Tib's
+                  Day.
+
+           %.     Try it and see.
+
+    EXAMPLES
+           % ddate
+           Sweetmorn, Bureaucracy 42, 3161 YOLD
+
+           % ddate +'Today is %{%A, the %e of %B%}, %Y. %N%nCelebrate %H'
+           Today is Sweetmorn, the 42nd of Bureaucracy, 3161.
+
+           % ddate +"It's %{%A, the %e of %B%}, %Y. %N%nCelebrate %H" 26 9 1995
+           It's Prickle-Prickle, the 50th of Bureaucracy, 3161.
+           Celebrate Bureflux
+
+       % ddate +"Today's %{%A, the %e of %B%}, %Y. %N%nCelebrate %H" 29 2 1996
+       Today's St. Tib's Day, 3162.
+     </summary>
+     <details>
+      EXAMPLES
+       % ddate
+       Sweetmorn, Bureaucracy 42, 3161 YOLD
+
+       % ddate +'Today is %{%A, the %e of %B%}, %Y. %N%nCelebrate %H'
+       Today is Sweetmorn, the 42nd of Bureaucracy, 3161.
+
+       % ddate +"It's %{%A, the %e of %B%}, %Y. %N%nCelebrate %H" 26 9 1995
+       It's Prickle-Prickle, the 50th of Bureaucracy, 3161.
+       Celebrate Bureflux
+
+       % ddate +"Today's %{%A, the %e of %B%}, %Y. %N%nCelebrate %H" 29 2 1996
+       Today's St. Tib's Day, 3162.
+
+
+BUGS
+       ddate(1)  will  produce undefined behavior if asked to produce the date
+       for St. Tib's day and its format string does not contain the St.  Tib's
+       Day delimiters %{ and %}.
+
+
+NOTE
+       After  `X-Day'  passed  without  incident,  the Church of the SubGenius
+       declared that it had got the year upside down - X-Day  is  actually  in
+       8661 AD rather than 1998 AD.  Thus, the True X-Day is Cfn 40, 9827.
+
+
+AUTHOR
+       Original   program   by   Druel   the   Chaotic   aka   Jeremy  Johnson
+       (mpython@gnu.ai.mit.edu)
+       Major  rewrite  by  Lee  H:.  O:.  Smith,  KYTP,  aka   Andrew   Bulhak
+       (acb@dev.null.org)
+       Five tons of flax.
+
+
+DISTRIBUTION POLICY
+       Public domain. All rites reversed.
+
+
+SEE ALSO
+       date(1),
+       http://www.subgenius.com/
+       Malaclypse the Younger, Principia Discordia, Or How I Found Goddess And
+       What I Did To Her When I Found Her
+
+
+AVAILABILITY
+       The ddate command is part of the util-linux package  and  is  available
+       from ftp://ftp.kernel.org/pub/linux/utils/util-linux/.
+
+</details>
+</ddate>
+
+<cowsay>
+  <topic>   
+    NAME
+           cowsay/cowthink - configurable speaking/thinking cow (and a bit more)
+  </topic>
+  <summary>
+    DESCRIPTION
+       Cowsay generates an ASCII picture of a cow saying something provided by
+       the  user.   If run with no arguments, it accepts standard input, word-
+       wraps the message given at about 40 columns, and prints the cow  saying
+       the given message on standard output.
+
+       To  aid in the use of arbitrary messages with arbitrary whitespace, use
+       the -n option.  If it is specified, the given message will not be word-
+       wrapped.   This is possibly useful if you want to make the cow think or
+       speak in figlet(6).  If -n is specified, there must not be any command-
+       line arguments left after all the switches have been processed.
+
+       The  -W  specifies  roughly  where  the message should be wrapped.  The
+       default is equivalent to -W 40 i.e. wrap words at or  before  the  40th
+       column.
+
+       If  any  command-line  arguments  are left over after all switches have
+       been processed, they become the cow's message.  The  program  will  not
+       accept standard input for a message in this case.
+
+       There are several provided modes which change the appearance of the cow
+       depending on its particular emotional/physical state.   The  -b  option
+       initiates  Borg  mode;  -d  causes  the  cow to appear dead; -g invokes
+       greedy mode; -p causes a state of paranoia to come  over  the  cow;  -s
+       makes  the  cow  appear thoroughly stoned; -t yields a tired cow; -w is
+       somewhat the opposite of -t, and initiates wired mode; -y brings on the
+       cow's youthful appearance.
+
+       The  user  may  specify  the  -e option to select the appearance of the
+       cow's eyes, in which case the first  two  characters  of  the  argument
+       string eye_string will be used.  The default eyes are 'oo'.  The tongue
+       is similarly configurable through -T and tongue_string; it must be  two
+       characters  and does not appear by default.  However, it does appear in
+       the 'dead' and 'stoned' modes.  Any configuration done  by  -e  and  -T
+       will be lost if one of the provided modes is used.
+
+       The  -f option specifies a particular cow picture file (``cowfile'') to
+       use.  If the cowfile spec contains '/' then it will be interpreted as a
+       path  relative to the current directory.  Otherwise, cowsay will search
+       the path specified in the COWPATH environment variable.   To  list  all
+       cowfiles on the current COWPATH, invoke cowsay with the -l switch.
+
+       If  the program is invoked as cowthink then the cow will think its mes‐
+       sage instead of saying it.
+  </summary>
+  <details>
+    COWFILE FORMAT
+           A cowfile is made up of a simple block of perl(1) code, which assigns a
+           picture  of a cow to the variable $the_cow.  Should you wish to custom‐
+           ize the eyes or the tongue of the cow, then  the  variables  $eyes  and
+           $tongue may be used.  The trail leading up to the cow's message balloon
+           is composed of the character(s) in the $thoughts variable.   Any  back‐
+           slashes  must  be reduplicated to prevent interpolation.  The name of a
+           cowfile should end with .cow, otherwise it is assumed not to be a  cow‐
+           file.   Also, at-signs (``@'') must be backslashed because that is what
+           Perl 5 expects.
+
+    COMPATIBILITY WITH OLDER VERSIONS
+           What older versions? :-)
+
+           Version 3.x is fully backward-compatible with 2.x versions.  If  you're
+           still  using  a 1.x version, consider upgrading.  And tell me where you
+           got the older versions, since I didn't exactly put them up  for  world-
+           wide access.
+
+           Oh,  just  so  you  know,  this  manual  page documents version 3.03 of
+           cowsay.
+
+    ENVIRONMENT
+           The COWPATH environment variable, if present, will be  used  to  search
+           for  cowfiles.  It contains a colon-separated list of directories, much
+           like   PATH   or   MANPATH.    It    should    always    contain    the
+           /usr/share/cowsay/cows  directory,  or at least a directory with a file
+           called default.cow in it.
+
+    FILES
+           /usr/share/cowsay/cows holds a sample set of cowfiles.  If your COWPATH
+           is not explicitly set, it automatically contains this directory.
+
+    BUGS
+           If there are any, please notify the author at the address below.
+
+    AUTHOR
+           Tony   Monroe  (tony@nog.net),  with  suggestions  from  Shannon  Appel
+           (appel@CSUA.Berkeley.EDU)  and  contributions   from   Anthony   Polito
+           (aspolito@CSUA.Berkeley.EDU).
+
+    SEE ALSO
+           perl(1), wall(1), nwrite(1), figlet(6)
+  </details>
+</cowsay>
+</man>
+
+
+
+
+
