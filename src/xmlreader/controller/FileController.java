@@ -96,9 +96,8 @@ public class FileController implements ActionListener{
 			this.treeModel = (DefaultTreeModel) navTree.getModel();
 			this.treeRoot = (DefaultMutableTreeNode) treeModel.getRoot();
 			
-			editorKit.insertHTML(doc, 0, "<style> .nobullet{list-style-type: none;} </style><ul>", 0, 0, null );
 			readFile(rootNode,0);
-			editorKit.insertHTML(doc, doc.getLength(), "</ul>", 0, 0, null );
+			editorKit.insertHTML(doc, doc.getLength(), "</body>", 0, 0, null );
 			navTree.expandRow(0);
 			
 		} catch(Exception e){
@@ -135,10 +134,11 @@ public class FileController implements ActionListener{
 	 */
 	public void formatValue(Node node, int indentLevel) throws BadLocationException, IOException{
 		if(node instanceof Text)
-			if(!node.getNodeValue().trim().isEmpty()){			
-				editorKit.insertHTML(doc,doc.getLength(), "<li class='nobullet' style='margin-left:" + indentLevel*20 + "px'>"
-					+ node.getNodeValue().trim()
-					+ "</li>", 0, 0, null );
+			if(!node.getNodeValue().trim().isEmpty()){
+				String formatted = node.getNodeValue().replace("\n", "<br>");
+				editorKit.insertHTML(doc,doc.getLength(), "<p style='margin-left:" + indentLevel*20 + "px'>"
+					+ formatted
+					+ "</p>", 0, 0, null );
 			}
 	}
 	
@@ -153,9 +153,9 @@ public class FileController implements ActionListener{
 	public void formatName(Node node, int indentLevel) throws IOException, BadLocationException{
 		if(node instanceof Text)
 			return;		
-		editorKit.insertHTML(doc, doc.getLength(), "<li class='nobullet' style='margin-left:" + indentLevel*20 + "px'><b>"
+		editorKit.insertHTML(doc, doc.getLength(), "<p style='margin-left:" + indentLevel*20 + "px'><b>"
 			+ node.getNodeName().toUpperCase()
-			+ "</b></li>", 0, 0, null );
+			+ "</b></p>", 0, 0, null );
 		addElementToTree(node);
 	}
 	
