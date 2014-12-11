@@ -1,4 +1,5 @@
 package xmlreader.controller;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -101,8 +102,14 @@ public class FileController implements ActionListener{
 			this.treeRoot = (DefaultMutableTreeNode) treeModel.getRoot();
 			
 			readFile(rootNode,0);
+			
+			//Close body html
 			editorKit.insertHTML(doc, doc.getLength(), "</body>", 0, 0, null );
+			//Expand first item in tree
 			navTree.expandRow(0);
+			//Scroll to the top of the file
+			Rectangle topRect = mainTextArea.modelToView(0);
+			mainTextArea.scrollRectToVisible(topRect);
 			
 		} catch(Exception e){
 			e.printStackTrace();
@@ -123,7 +130,7 @@ public class FileController implements ActionListener{
 
 		for(int index = 0; index < nodeList.getLength(); index++){
 			Node child = nodeList.item(index);
-			formatValue(child, indentLevel);
+			formatValue(child, indentLevel+1);
 			readFile(child, indentLevel+1);
 		}
 	}

@@ -1,21 +1,31 @@
 package xmlreader.view;
+import java.awt.Dimension;
 import java.awt.Insets;
+
 import javax.swing.JPanel;
+
 import net.miginfocom.swing.MigLayout;
+
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+
 import xmlreader.controller.FileController;
 import xmlreader.controller.SearchController;
+
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JCheckBox;
 import javax.swing.JSeparator;
 
 
+/**
+ * @author Alec
+ * This class is responsible for displaying all of the contents of the toolba
+ */
 public class ToolbarView extends JPanel {
 	private JTextField browseField;
 	private JTextField searchField;
@@ -37,7 +47,7 @@ public class ToolbarView extends JPanel {
 	 * @param mainView
 	 */
 	public ToolbarView(MainView mainView) {
-		setLayout(new MigLayout("", "[grow][grow][][grow][grow][][grow][grow][grow]", "[][][][][]"));
+		setLayout(new MigLayout("", "[grow][grow][][grow][][grow][][grow][grow][grow]", "[][][]"));
 		this.mainView = mainView;
 		String searchIconPath = "/xmlreader/icons/search.png";
 		String browseIconPath = "/xmlreader/icons/browse.png";
@@ -52,12 +62,13 @@ public class ToolbarView extends JPanel {
 		
 		lblView = new JLabel("(non-functioning) Show these sections:");
 		lblView.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lblView, "cell 7 0,alignx left,aligny top");
+		add(lblView, "cell 8 0,alignx left,aligny top");
 		
 		browseField = new JTextField();
 		add(browseField, "cell 0 1,growx");
 		browseField.setEditable(false);
 		browseField.setColumns(10);
+		browseField.setMinimumSize(new Dimension(200,20));
 		
 		JButton btnBrowse = new JButton("Open", new ImageIcon(getClass().getResource(browseIconPath)));
 		btnBrowse.setMargin(new Insets(0,0,0,0));
@@ -68,13 +79,12 @@ public class ToolbarView extends JPanel {
 		add(separator_1, "cell 2 1,alignx center,growy");
 		
 		searchField = new JTextField();
-		searchField.setHorizontalAlignment(SwingConstants.CENTER);
+		searchField.setHorizontalAlignment(SwingConstants.LEFT);
 		searchField.setColumns(10);
 		searchField.setMargin(new Insets(0,0,0,0));
+		searchField.setPreferredSize(new Dimension(200,20));
 		searchField.setEnabled(false);
-		add(searchField, "cell 3 1,growx,aligny center");;
-		searchLabel = new JLabel(new ImageIcon(getClass().getResource(searchIconPath)));
-		add(searchLabel, "cell 4 1,alignx left");
+		add(searchField, "flowx,cell 3 1,aligny center");
 		
 		findResultSpinner = new JSpinner();
 		findResultSpinner.setValue(1);
@@ -82,29 +92,32 @@ public class ToolbarView extends JPanel {
 		JComponent editor = findResultSpinner.getEditor();
 		JFormattedTextField tf = ((JSpinner.DefaultEditor) editor).getTextField();
 		tf.setColumns(4);
-		add(findResultSpinner, "flowx,cell 4 1,alignx left");
+		add(findResultSpinner, "cell 3 1,alignx leading");
+		
+		searchLabel = new JLabel(new ImageIcon(getClass().getResource(searchIconPath)));
+		add(searchLabel, "cell 3 1,alignx leading");
 		
 		separator = new JSeparator();
 		separator.setOrientation(SwingConstants.VERTICAL);
-		add(separator, "cell 5 1,alignx center,growy");
+		add(separator, "cell 6 1,alignx center,growy");
 		chckbxTopic = new JCheckBox("Topic");
 		chckbxTopic.setLayout(new MigLayout("insets 0", "", ""));
-		add(chckbxTopic, "cell 6 1,alignx center");
+		add(chckbxTopic, "cell 7 1,alignx center");
 		chckbxSummary = new JCheckBox("Summary");
 		chckbxSummary.setLayout(new MigLayout("insets 0", "", ""));
-		add(chckbxSummary, "cell 7 1,alignx center");
+		add(chckbxSummary, "cell 8 1,alignx center");
 		chckbxDetails = new JCheckBox("Details");
 		chckbxDetails.setLayout(new MigLayout("insets 0", "", ""));
-		add(chckbxDetails, "cell 8 1,alignx center");
+		add(chckbxDetails, "cell 9 1,alignx center");
 		
 		lblResult = new JLabel();
-		add(lblResult, "cell 3 4,alignx left");
-			
-		btnBrowse.addActionListener(new FileController(this));
+		add(lblResult, "cell 3 2 3 1,alignx left");
 		
 		SearchController searchController = new SearchController(this);
-		findResultSpinner.addChangeListener(searchController);
 		searchField.addKeyListener(searchController);
+		findResultSpinner.addChangeListener(searchController);
+		btnBrowse.addActionListener(new FileController(this));
+		
 	}
 	
 	/**
