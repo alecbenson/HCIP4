@@ -101,12 +101,15 @@ public class ToolbarView extends JPanel {
 		separator.setOrientation(SwingConstants.VERTICAL);
 		add(separator, "cell 6 1,alignx center,growy");
 		chckbxTopic = new JCheckBox("Topic");
+		chckbxTopic.setSelected(true);
 		chckbxTopic.setLayout(new MigLayout("insets 0", "", ""));
 		add(chckbxTopic, "cell 7 1,alignx center");
 		chckbxSummary = new JCheckBox("Summary");
+		chckbxSummary.setSelected(true);
 		chckbxSummary.setLayout(new MigLayout("insets 0", "", ""));
 		add(chckbxSummary, "cell 8 1,alignx center");
 		chckbxDetails = new JCheckBox("Details");
+		chckbxDetails.setSelected(true);
 		chckbxDetails.setLayout(new MigLayout("insets 0", "", ""));
 		add(chckbxDetails, "cell 9 1,alignx center");
 		
