@@ -1,25 +1,17 @@
 package xmlreader.view;
 import java.awt.Insets;
-import java.util.Hashtable;
-
 import javax.swing.JPanel;
-
 import net.miginfocom.swing.MigLayout;
-
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
-
 import xmlreader.controller.FileController;
 import xmlreader.controller.SearchController;
-
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
-import javax.swing.event.ChangeListener;
-import javax.swing.JSlider;
 import javax.swing.JCheckBox;
 import javax.swing.JSeparator;
 
@@ -40,6 +32,10 @@ public class ToolbarView extends JPanel {
 	private JLabel lblInstruction;
 	private JLabel labelSearch;
 	
+	/**
+	 * This view is responsible for displaying the contents of the toolbar
+	 * @param mainView
+	 */
 	public ToolbarView(MainView mainView) {
 		setLayout(new MigLayout("", "[grow][grow][][grow][grow][][grow][grow][grow]", "[][][][][]"));
 		this.mainView = mainView;
@@ -54,7 +50,7 @@ public class ToolbarView extends JPanel {
 		labelSearch.setHorizontalAlignment(SwingConstants.CENTER);
 		add(labelSearch, "cell 3 0");
 		
-		lblView = new JLabel("(non-functioning) Show:");
+		lblView = new JLabel("(non-functioning) Show these sections:");
 		lblView.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblView, "cell 7 0,alignx left,aligny top");
 		
@@ -111,23 +107,38 @@ public class ToolbarView extends JPanel {
 		searchField.addKeyListener(searchController);
 	}
 	
+	/**
+	 * @return the searchfield component
+	 */
 	public JTextField getSearchField(){
 		return searchField;
 	}
 	
+	/**
+	 * @return the searchfield's result spinner
+	 */
 	public JSpinner getSpinner(){
 		return findResultSpinner;
 	}
 	
 	
+	/**
+	 * @return the mainview that contains all of the parsed XML
+	 */
 	public MainView getMainView(){
 		return mainView;
 	}
 	
+	/**
+	 * @return the label that tells users how many results have been found
+	 */
 	public JLabel getResultLabel(){
 		return lblResult;
 	}
 	
+	/**
+	 * @return the text field that tells users what file they have opened.
+	 */
 	public JTextField getBrowseField(){
 		return browseField;
 	}

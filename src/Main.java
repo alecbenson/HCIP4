@@ -5,6 +5,10 @@ import javax.swing.JFrame;
 import xmlreader.view.MainView;
 
 
+/**
+ * @author Alec
+ * The main class that kicks everything off
+ */
 public class Main {
 	public static void main(String[] args){
       JFrame f = new MainView();

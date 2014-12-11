@@ -29,6 +29,10 @@ import xmlreader.view.MainView;
 import xmlreader.view.ToolbarView;
 
 
+/**
+ * @author Alec
+ * This file is responsible for parsing the XML file and adding the elements to the mainview and JTree
+ */
 public class FileController implements ActionListener{
 	private final static JFileChooser fc = new JFileChooser();
 	private File xmlFile;
@@ -152,13 +156,39 @@ public class FileController implements ActionListener{
 	 */
 	public void formatName(Node node, int indentLevel) throws IOException, BadLocationException{
 		if(node instanceof Text)
-			return;		
-		editorKit.insertHTML(doc, doc.getLength(), "<p style='margin-left:" + indentLevel*20 + "px'><b>"
-			+ node.getNodeName().toUpperCase()
-			+ "</b></p>", 0, 0, null );
-		addElementToTree(node);
+			return;
+		
+		//If this node is the main root, then add it as an H1
+		if(node.equals(rootNode)){
+			editorKit.insertHTML(doc, doc.getLength(), "<h1 style='margin-left:" + indentLevel*20 + "px'><b>"
+					+ node.getNodeName().toUpperCase()
+					+ "</b></h1>", 0, 0, null );
+				addElementToTree(node);
+			return;
+		}
+		
+		//If this is a main title, add a page break and a separator, and add the node as an H2
+		if(node.getParentNode().equals(rootNode)){
+			editorKit.insertHTML(doc, doc.getLength(), "<br><hr>", 0, 0, null);
+		
+			editorKit.insertHTML(doc, doc.getLength(), "<h2 style='margin-left:" + indentLevel*20 + "px'><b>"
+				+ node.getNodeName().toUpperCase()
+				+ "</b></h2>", 0, 0, null );
+			addElementToTree(node);
+			return;
+		} 
+		
+		//Otherwise, this is just a  normal title element and we should add it as a normal paragraph header
+		editorKit.insertHTML(doc, doc.getLength(), "<p style='margin-left:" + indentLevel*20 + "px'><i><b>"
+				+ node.getNodeName().toUpperCase()
+				+ "</b></i></p>", 0, 0, null );
+			addElementToTree(node);
 	}
 	
+	/**
+	 * Adds an element to the JTree on the right
+	 * @param node - the XML node to add
+	 */
 	public void addElementToTree(Node node){
 		XMLTreeNode parentNode = (XMLTreeNode) getTreeNode(node.getParentNode() );
 		XMLTreeNode nodeToAdd = new XMLTreeNode(node, getNodeIndex(node));
@@ -176,6 +206,12 @@ public class FileController implements ActionListener{
 		}
 	}
 	
+	/**
+	 * Get the index of the node within the tree. This is used to identify where in the page we should
+	 * jump to when the user clicks on the item in the tree
+	 * @param node - the node to get the index of
+	 * @return
+	 */
 	public int getNodeIndex(Node node){
 		int index = 0;
 		Enumeration e = treeRoot.depthFirstEnumeration();
@@ -186,6 +222,12 @@ public class FileController implements ActionListener{
 		return index;
 	}
 	
+	
+	/**
+	 * Given an XML node, find the corresponding element within the Jtree
+	 * @param node - the XML node to get the tree element of
+	 * @return null if no match, XMLTreeNode otherwise
+	 */
 	public XMLTreeNode getTreeNode(Node node){
 		XMLTreeNode lastNode = null;
 		if(treeStructureList.isEmpty())

@@ -5,6 +5,11 @@ import javax.swing.text.DefaultCaret;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 
+/**
+ * @author Alec
+ * This is an extension of the defaultCaret. It is used to keep the find results highlighted even when
+ * the main window is not currently focused. 
+ */
 public class HighlightCaret extends DefaultCaret {
 
     private static final Highlighter.HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
