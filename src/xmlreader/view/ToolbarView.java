@@ -52,7 +52,7 @@ public class ToolbarView extends JPanel {
 		labelSearch.setHorizontalAlignment(SwingConstants.CENTER);
 		add(labelSearch, "cell 3 0");
 		
-		lblView = new JLabel("Show:");
+		lblView = new JLabel("(non-functioning) Show:");
 		lblView.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblView, "cell 7 0,alignx left,aligny top");
 		
